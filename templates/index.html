@@ -4,12 +4,37 @@
 
 <div class="container">
     <h1>Welcome!</h1>
-    <form action="">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="messages">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+{% endwith %}
+
+    <form form id = "auth-form" action="{{url_for('login')}}" method="post">
         <input type="text" name="username" placeholder="Username" class="input-field">
         <input type="password" name="password" placeholder="Password"  class="input-field">  
-        <input type="submit" value="Login" class="btn btn-login">
-        <input type="button" value="Register" class="btn btn-register">
+        <input type="submit" value="Login" class="btn btn-login" onclick="setActionForm('login')">
+        <input type="button" value="Register" class="btn btn-register" onclick="setActionForm('register')">
     </form>
 </div>
+
+<script>
+    function setActionForm(action){
+        let form = document.getElementById("auth-form");
+        if (action === 'login'){
+            form.action = "{{url_for('login')}}";
+            form.method = "post";
+            form.submit();  
+        } else if (action === 'register'){
+            form.action = "{{url_for('register')}}";
+            form.method = "post";
+            form.submit();
+        }
+    }
+</script>
 
 {% endblock %} 
